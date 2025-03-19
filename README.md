@@ -10,7 +10,7 @@
 
 </div>
 
-[![Learning Orientation Field for OSM-Guided Autonomous Navigation](cover.jpg)](https://https://youtu.be/nGqufhbP2NQ "Learning Orientation Field for OSM-Guided Autonomous Navigation")
+[![Learning Orientation Field for OSM-Guided Autonomous Navigation](cover.jpg)](https://youtu.be/nGqufhbP2NQ "Learning Orientation Field for OSM-Guided Autonomous Navigation")
 
 ## News
 - **2025-03-18**: The paper was submitted to the Journal of Field Robotics. 
