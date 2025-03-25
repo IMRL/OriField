@@ -7,7 +7,7 @@ OpenStreetMap (OSM) has gained popularity recently in autonomous navigation due 
 
 <a href="https://"><img src='https://img.shields.io/badge/PDF-IEEE%20Xplore-purple' alt='PDF'></a>
 <a href="https://arxiv.org/abs/2503.18276"><img src='https://img.shields.io/badge/PDF-arXiv-lightgreen' alt='PDF'></a>
-<a href="https://"><img src='https://img.shields.io/badge/Video-YouTube-blue' alt='Video'></a>
+<a href="https://https://www.youtube.com/watch?v=nGqufhbP2NQ"><img src='https://img.shields.io/badge/Video-YouTube-blue' alt='Video'></a>
 <a href="https://"><img src='https://img.shields.io/badge/Dataset-red' alt='Dataset'></a>
 <a href="https://"><img src='https://img.shields.io/badge/Supplementary%20Material-pink' alt='Supplementary Material'></a>
 
