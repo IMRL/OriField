@@ -17,3 +17,4 @@ OpenStreetMap (OSM) has gained popularity recently in autonomous navigation due 
 
 ## News
 - **2025-03-18**: The paper was submitted to the Journal of Field Robotics. 
+- **2025-08-14**: The paper was accepted to the Journal of Field Robotics. 
