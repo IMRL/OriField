@@ -1,16 +1,10 @@
 import numpy as np
-from scipy.ndimage import distance_transform_edt
 from scipy.ndimage import convolve
-from scipy.ndimage import binary_erosion, binary_dilation
+from scipy.ndimage import binary_dilation
 from scipy.spatial.distance import cdist
-from skimage import measure, color
 from skimage.morphology import medial_axis, skeletonize
-from skimage.graph import route_through_array
-from skimage.draw import line
 import networkx as nx
-import rdp
 from numba import jit
-import matplotlib.pyplot as plt
 
 from . import planning
 

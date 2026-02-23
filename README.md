@@ -68,6 +68,11 @@ Follow these steps to set up the project environment. This project is tested on 
     ```
 
 3.  **Install dependencies:**
+
+    Install Pytorch
+    ```bash
+    pip install torch==1.9.1+cu111 torchvision==0.10.1+cu111 torchaudio==0.9.1 -f https://download.pytorch.org/whl/torch_stable.html
+    ```
     Install Detectron2
     ```bash
     python -m pip install detectron2==0.6 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu111/torch1.9/index.html

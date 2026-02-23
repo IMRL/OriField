@@ -1,18 +1,12 @@
 import os
 import numpy as np
 import cv2
-import torch
-import autograd
-from scipy.ndimage import distance_transform_edt
-from scipy.stats import mode
 from scipy.spatial.distance import cdist
-from scipy.ndimage import uniform_filter, uniform_filter1d, median_filter
 from skimage.measure import block_reduce
 from skimage.draw import line
 
 from lidardet.ops.planning import planning
 
-from .grad import traversability_to_edt, traj_grad_descent
 from .ngm import smooth_and_brocast_tangent
 
 
@@ -29,34 +23,6 @@ def map_traj(rrt_traj, img_h, img_w, rrt_tree_map=None):
             rrt_planned_map[child_node] = rrt_tree_map[child_node]
     rrt_planned_map = np.where(rrt_planned_map == 0.5, np.ones_like(rrt_planned_map) * 3, rrt_planned_map)
     return rrt_planned_map
-
-
-class NGMOptimizer:
-    def __init__(self, traversability_map, tangent_map):
-        self.traversability_map = traversability_map
-        self.tangent_map = tangent_map
-
-    def optimize(self, rrt_traj):
-        img_h, img_w = self.tangent_map.shape[:2]
-        normalized_traj = rrt_traj.copy().astype(np.float32)
-        normalized_traj[:, 0] /= img_h-1
-        normalized_traj[:, 1] /= img_w-1
-
-        if normalized_traj.shape[0] >= 2:
-            padded_traversability_map = np.pad(self.traversability_map, ((1, 1), (1, 1)))
-            edt_map = traversability_to_edt(padded_traversability_map)[1:-1, 1:-1]
-            rrt_traj_optimize = traj_grad_descent(self.tangent_map, edt_map, normalized_traj, anp=True)
-        else:
-            rrt_traj_optimize = normalized_traj.copy()
-
-        rrt_traj_optimize[:, 0] *= img_h-1
-        rrt_traj_optimize[:, 1] *= img_w-1
-        rrt_traj_optimize = rrt_traj_optimize.astype(np.int32)
-        if normalized_traj.shape[0] >= 2:
-            rrt_traj_optimize[0] = rrt_traj[0]
-        rrt_map_optimize = map_traj(rrt_traj_optimize, img_h, img_w)
-
-        return rrt_map_optimize, rrt_traj_optimize
 
 
 class Dijkstra:
@@ -324,99 +290,6 @@ class RNT:
             print("rrt_conf2", rrt_conf2, rrt_conf2/rrt_traj2.shape[0])
             rrt_planned_map2 = map_traj(rrt_traj2, img_h, img_w, rrt_tree_map)
             return (rrt_tree_map, rrt_gain_map, rrt_inc_energy_map, rrt_inc_gain_map, rrt_planned_map, rrt_traj), (rrt_tree_map, rrt_gain_map, rrt_inc_energy_map, rrt_inc_gain_map, rrt_planned_map2, rrt_traj2)
-
-
-class CurbSupport:
-    def __init__(self, traversability_map, conf_map, tangent_map, discorage_map):
-        self.traversability_map = traversability_map
-        self.conf_map = conf_map
-        self.tangent_map = tangent_map
-        self.discorage_map = discorage_map
-
-    def plan(self, res, key_meters, start=None):
-        img_h, img_w = self.traversability_map.shape
-
-        if start is None:
-            start = (int(img_h/2), int(img_w/2))
-        key_pixels = int(key_meters / res)
-        canvas = np.zeros((img_h, img_w), dtype=np.uint8)
-        color = 255        # Color of the circle (white)
-        thickness = 1       # Thickness (-1 will fill the circle)
-        cv2.circle(canvas, (start[1], start[0]), key_pixels, color, thickness)
-        key_map = canvas == color
-
-        trajectory = [np.array(start)]
-        trajectory_left = []
-        trajectory_right = []
-        thr = np.pi/6
-        num_points = img_h + img_w
-        step = 5
-        magnitude_thr = 15
-
-        tangent_map_x = self.tangent_map[..., 0]
-        tangent_map_y = self.tangent_map[..., 1]
-        itr = 0
-        while trajectory[-1][0] > 10 and trajectory[-1][0] < img_h - 10 and trajectory[-1][1] > 10 and trajectory[-1][1] < img_w - 10 and itr < num_points:
-            itr += 1    
-            row_mid = trajectory[-1][0]
-            col_mid = trajectory[-1][1]
-            vec_mid = np.array([tangent_map_x[row_mid,col_mid], tangent_map_y[row_mid,col_mid]])
-
-            step_size = 1
-            new_point_mid = trajectory[-1] + step * vec_mid
-
-            row_update = round(new_point_mid[0])
-            col_update = round(new_point_mid[1])
-            trajectory.append(np.array([row_update, col_update]))
-            vec_mid = np.array([tangent_map_x[row_update,col_update], tangent_map_y[row_update,col_update]])
-
-            # plot(col_update, row_update, 'r.', 'MarkerSize', 10); % Trajectory
-
-            vec_mid_perpend = np.array([vec_mid[1], -vec_mid[0]])
-            for i in range(num_points):
-                offset = i * step_size
-                new_point = new_point_mid + offset * vec_mid_perpend
-                row_new = round(new_point[0])
-                col_new = round(new_point[1])
-                # plot(col_new, row_new, 'g.', 'MarkerSize', 10); % Trajectory
-                vec_search = np.array([tangent_map_x[row_new,col_new], tangent_map_y[row_new,col_new]])
-                angle = np.arccos(np.dot(vec_mid, vec_search))
-                if (angle > thr) or (col_new <= 0 or col_new >= img_w - 1 or row_new <= 0 or row_new >= img_h - 1):
-                    # plot(col_new,row_new, 'b.', 'MarkerSize', 15); % Trajectory
-                    trajectory_left.append(np.array([row_new, col_new]))
-                    break
-
-            for i in range(num_points):
-                offset = i * step_size
-                new_point = new_point_mid - offset * vec_mid_perpend
-                row_new = round(new_point[0])
-                col_new = round(new_point[1])
-                # plot(col_new, row_new, 'g.', 'MarkerSize', 10); % Trajectory
-                vec_search = np.array([tangent_map_x[row_new,col_new], tangent_map_y[row_new,col_new]])
-                angle = np.arccos(np.dot(vec_mid, vec_search))
-                if (angle > thr) or (col_new <= 0 or col_new >= img_w - 1 or row_new <= 0 or row_new >= img_h - 1):
-                    # plot(col_new,row_new, 'b.', 'MarkerSize', 15); % Trajectory
-                    trajectory_right.append(np.array([row_new, col_new]))
-                    break
-
-            magnitude = np.linalg.norm(trajectory_left[-1] - trajectory_right[-1])
-            if magnitude < magnitude_thr:
-                break
-
-            row_update = round((trajectory_left[-1][0]+trajectory_right[-1][0])/2)
-            col_update = round((trajectory_left[-1][1]+trajectory_right[-1][1])/2)
-            trajectory[-1] = np.array([row_update, col_update])
-            # plot(col_update, row_update, 'r.', 'MarkerSize', 15); % Trajectory
-        trajectory = np.array(trajectory)
-        trajectory_left = np.array(trajectory_left)
-        trajectory_right = np.array(trajectory_right)
-        
-        smoothed_trajectory = trajectory.copy()
-        smoothed_trajectory[:, 0] = median_filter(smoothed_trajectory[:, 0], size=7, mode="nearest")
-        smoothed_trajectory[:, 1] = median_filter(smoothed_trajectory[:, 1], size=7, mode="nearest")
-        # plot(smoothed_trajectory(:, 1), smoothed_trajectory(:, 2), 'r-', 'MarkerSize', 15, 'LineWidth', 2); % Trajectory
-
-        return smoothed_trajectory, trajectory, trajectory_left, trajectory_right, start
 
 
 class Skeleton:

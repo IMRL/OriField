@@ -1,6 +1,5 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 import logging
-from typing import Callable, Dict, List, Optional, Tuple, Union
 
 import fvcore.nn.weight_init as weight_init
 import torch

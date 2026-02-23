@@ -6,12 +6,9 @@ import yaml
 import numpy as np
 from scipy.spatial.distance import euclidean, cdist
 from scipy.ndimage import uniform_filter
-from scipy.interpolate import splprep, splev
 from fastdtw import fastdtw
-import torch
 import matplotlib as mpl
 from matplotlib import pyplot as plt
-from torchvision.utils import save_image
 from torchvision.transforms import ToTensor
 import cv2
 
@@ -134,9 +131,6 @@ class TrajectoryEvaluator(SemSegEvaluator):
         else:
             discorage_map = 1 - encorage_map
         return planning.RNT(extend_area, label_traversable != 0, conf_map, -tangent_map, discorage_map)
-
-    def ngm_optimizer(self, label_traversable, tangent_map):
-        return planning.NGMOptimizer(label_traversable != 0, -tangent_map)
 
     def key_traj(self, traj, key_meters, mode):
         if traj.shape[0] == 0:

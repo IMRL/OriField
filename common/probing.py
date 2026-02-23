@@ -1,7 +1,6 @@
 import seaborn as sns
 import numpy as np
 from matplotlib import pyplot as plt
-import prettypyplot as pplt
 from common.visulization import Visulizater
 
 
