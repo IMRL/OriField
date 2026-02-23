@@ -1,0 +1,84 @@
+sk:
+  classname:
+    loaderbagname: "LoaderbagRV"
+    databagname: "SemanticKittiDatabag"
+  mode:
+    panoptic: False
+    multi_scan: False
+sk_p:
+  classname:
+    loaderbagname: "LoaderbagRV"
+    databagname: "SemanticKittiDatabag"
+  mode:
+    panoptic: True
+    multi_scan: False
+sk_p_4d:
+  classname:
+    loaderbagname: "LoaderbagRV"
+    databagname: "SemanticKittiDatabag"
+  mode:
+    panoptic: True
+    multi_scan: True
+ns:
+  classname:
+    loaderbagname: "LoaderbagRV"
+    databagname: "NuscenesDatabag"
+  mode:
+    panoptic: False
+    multi_scan: False
+ns_p:
+  classname:
+    loaderbagname: "LoaderbagRV"
+    databagname: "NuscenesDatabag"
+  mode:
+    panoptic: True
+    multi_scan: False
+ns_p_4d:
+  classname:
+    loaderbagname: "LoaderbagRV"
+    databagname: "NuscenesDatabag"
+  mode:
+    panoptic: True
+    multi_scan: True
+wm:
+  classname:
+    loaderbagname: "LoaderbagRV"
+    databagname: "WaymoDatabag"
+  mode:
+    panoptic: False
+    multi_scan: False
+wm_p:
+  classname:
+    loaderbagname: "LoaderbagRV"
+    databagname: "WaymoDatabag"
+  mode:
+    panoptic: True
+    multi_scan: False
+wm_p_4d:
+  classname:
+    loaderbagname: "LoaderbagRV"
+    databagname: "WaymoDatabag"
+  mode:
+    panoptic: True
+    multi_scan: True
+k360:
+  classname:
+    loaderbagname: "LoaderbagRV"
+    databagname: "Kitti360Databag"
+  mode:
+    panoptic: False
+    multi_scan: False
+k360_p:
+  classname:
+    loaderbagname: "LoaderbagRV"
+    databagname: "Kitti360Databag"
+  mode:
+    panoptic: True
+    multi_scan: False
+k360_p_4d:
+  classname:
+    loaderbagname: "LoaderbagRV"
+    databagname: "Kitti360Databag"
+  mode:
+    panoptic: True
+    multi_scan: True

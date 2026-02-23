@@ -1,0 +1,21 @@
+_BASE_: Base.yaml
+MODEL:
+#  WEIGHTS: "xxx.pth"
+  META_ARCHITECTURE: "Model"
+  SEM_SEG_HEAD:
+    NAME: "SimpleBaselineHead"
+    NUM_CLASSES: 9  # 1+8
+    IGNORE_VALUE: 0
+
+    CUSTOM_PADDING: False
+    NUM_FEATURE_LEVELS: 1
+    NUM_DEEP_LEVELS: 1
+
+    DIRECT_PRED: True
+    NO_FOCAL: True
+    CLASS_BALANCE: False
+    LOSS_WEIGHT: 1.0
+    LOVASZ: False
+    LOVASZ_WEIGHT: 1.0
+    BOUNDARY: False
+    BOUNDARY_WEIGHT: 1.0
