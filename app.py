@@ -20,8 +20,6 @@ from model import setup as setup_cfg
 from common.peroidic import peroidic_np
 from common.polar import *
 
-PATH = os.path.dirname(os.path.abspath(__file__))
-
 
 def get_pred(tangent_init_polar, pred):
     return tangent_init_polar + pred

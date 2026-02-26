@@ -6,8 +6,6 @@ from detectron2.config import configurable
 from detectron2.modeling import META_ARCH_REGISTRY, build_backbone, build_sem_seg_head
 from detectron2.modeling.backbone import Backbone
 
-from model.heads import SimpleBaselineHead
-
 from common.polar import cartesian_to_polar
 from common.peroidic import peroidic_torch
 
@@ -40,6 +38,10 @@ class Model(nn.Module):
     @property
     def device(self):
         return self.pixel_mean.device
+
+    @property
+    def dtype(self):
+        return self.pixel_mean.dtype
 
     def forward(self, batched_inputs):
         tangent_init_polar = torch.stack([cartesian_to_polar(input["tangent_init"][..., 0], input["tangent_init"][..., 1])[1] for input in batched_inputs]).to(self.device)  # -pi, pi
@@ -87,7 +89,7 @@ class Model(nn.Module):
 def build_directer(cfg):
     nclasses = cfg.MODEL.SEM_SEG_HEAD.NUM_CLASSES
 
-    from model.backbones import SalsaNext
+    from .backbones import SalsaNext
     backbone = SalsaNext(custom_padding=cfg.MODEL.SEM_SEG_HEAD.CUSTOM_PADDING, multi_scale=cfg.MODEL.SEM_SEG_HEAD.NUM_FEATURE_LEVELS, deep_supervision=cfg.MODEL.SEM_SEG_HEAD.NUM_DEEP_LEVELS, in_channels=6, nclasses=nclasses, base_channels=32)
 
     return backbone

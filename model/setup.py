@@ -3,7 +3,7 @@ from detectron2.projects.deeplab import add_deeplab_config
 from detectron2.engine import default_setup
 from detectron2.utils.logger import setup_logger
 import detectron2.utils.comm as comm
-from model import add_model_config
+from . import add_model_config
 
 
 def setup(args):
