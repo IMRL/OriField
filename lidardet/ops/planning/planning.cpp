@@ -825,7 +825,7 @@ public:
     NodeBridges(const Point& parentPoint_, const Grid& parentGrid_, const Point& childPoint_, const Grid& childGrid_, const Tangent& parentTangent_, const Tangent& childTangent_, int sampleCount) {
         for (int i = 0; i < sampleCount; ++i) {
             for (int j = 0; j < sampleCount; ++j) {
-                for (int k = -sampleCount+1; k <= sampleCount-1; ++k) {
+                for (int k = 0; k <= 0; ++k) {
                     const Tangent& t0 = Tangent({-1, 0});
                     const Tangent& t1 = childTangent_.rotate(float(k) / sampleCount * (PI / 4));
                     auto nodeBridge = NodeBridge(parentPoint_, parentGrid_, childPoint_, childGrid_, t0, t1, 1 + float(i)/sampleCount, 1 + float(j)/sampleCount);
