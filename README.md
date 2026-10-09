@@ -20,7 +20,7 @@ OpenStreetMap (OSM) has gained popularity recently in autonomous navigation due 
 - **2025-03-18**: The paper was submitted to the Journal of Field Robotics. 
 - **2025-08-14**: The paper was accepted to the Journal of Field Robotics. 
 - **2026-02-23**: The source codes with pre-trained models and gradio app are released. 
-- **2026-10-09**: The complete [BEV training dataset](https://huggingface.co/datasets/yuminhhuang/OriField-raw-derived-bev-kitti) and [pre-trained checkpoint, configuration, and ONNX model](https://huggingface.co/yuminhhuang/OriField) are now publicly available on Hugging Face!
+- **2026-10-09**: The [BEV training dataset](https://huggingface.co/datasets/yuminhhuang/OriField-raw-derived-bev-kitti) and [pre-trained checkpoint, configuration, and ONNX model](https://huggingface.co/yuminhhuang/OriField) are now publicly available on Hugging Face! You don't need to build training data into ./training_data/ manually anymore. And the newly released models are identical to the ones in this repo.
 
 # Orientation Field
 
@@ -98,15 +98,15 @@ The paper's data and model artifacts are available on Hugging Face:
 
 | Resource | Contents |
 | --- | --- |
-| [BEV training dataset](https://huggingface.co/datasets/yuminhhuang/OriField-raw-derived-bev-kitti) | `raw-derived-bev-kitti/`: 45,192 files, approximately 72.03 GB. Symbolic links and `.3d` data are excluded. |
+| [BEV training dataset](https://huggingface.co/datasets/yuminhhuang/OriField-raw-derived-bev-kitti) | `raw-derived-bev-kitti/`: 45,192 files, approximately 72.03 GB. |
 | [Pre-trained models](https://huggingface.co/yuminhhuang/OriField) | `output.example/config.yaml`, `output.example/model_final.pth`, and `output.example/inference/model.onnx`. |
 
 Use the Hugging Face CLI (`hf`) to download the files. Run the model download from the root of this repository:
 
 ```bash
-# Download training data to ./data/raw-derived-bev-kitti/ (about 72 GB).
+# Download training data to ./training_data/raw-derived-bev-kitti/ (about 72 GB).
 hf download yuminhhuang/OriField-raw-derived-bev-kitti --repo-type dataset \
-    --include "raw-derived-bev-kitti/**" --local-dir ./data
+    --include "raw-derived-bev-kitti/**" --local-dir ./training_data
 
 # Download the checkpoint, configuration, and ONNX export to ./output.example/.
 hf download yuminhhuang/OriField \
