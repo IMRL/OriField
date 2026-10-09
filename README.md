@@ -8,7 +8,8 @@ OpenStreetMap (OSM) has gained popularity recently in autonomous navigation due 
 <a href="https://"><img src='https://img.shields.io/badge/PDF-IEEE%20Xplore-purple' alt='PDF'></a>
 <a href="https://arxiv.org/abs/2503.18276"><img src='https://img.shields.io/badge/PDF-arXiv-lightgreen' alt='PDF'></a>
 <a href="https://https://www.youtube.com/watch?v=nGqufhbP2NQ"><img src='https://img.shields.io/badge/Video-YouTube-blue' alt='Video'></a>
-<a href="https://"><img src='https://img.shields.io/badge/Dataset-red' alt='Dataset'></a>
+<a href="https://huggingface.co/datasets/yuminhhuang/OriField-raw-derived-bev-kitti"><img src='https://img.shields.io/badge/Dataset-Hugging%20Face-red' alt='Dataset on Hugging Face'></a>
+<a href="https://huggingface.co/yuminhhuang/OriField"><img src='https://img.shields.io/badge/Models-Hugging%20Face-yellow' alt='Models on Hugging Face'></a>
 <a href="https://"><img src='https://img.shields.io/badge/Supplementary%20Material-pink' alt='Supplementary Material'></a>
 
 </div>
@@ -19,6 +20,7 @@ OpenStreetMap (OSM) has gained popularity recently in autonomous navigation due 
 - **2025-03-18**: The paper was submitted to the Journal of Field Robotics. 
 - **2025-08-14**: The paper was accepted to the Journal of Field Robotics. 
 - **2026-02-23**: The source codes with pre-trained models and gradio app are released. 
+- **2026-10-09**: The complete [BEV training dataset](https://huggingface.co/datasets/yuminhhuang/OriField-raw-derived-bev-kitti) and [pre-trained checkpoint, configuration, and ONNX model](https://huggingface.co/yuminhhuang/OriField) are now publicly available on Hugging Face!
 
 # Orientation Field
 
@@ -33,6 +35,7 @@ This is the official implementation for **Learning Orientation Field for OSM-Gui
 ## Table of Contents
 * [To-Do Checklist](#to-do-checklist)
 * [Installation](#installation)
+* [Download Data and Models](#download-data-and-models)
 * [Start Training](#how-to-train)
 * [Run Inference](#how-to-inference)
 * [Gradio App](#gradio-app)
@@ -46,6 +49,7 @@ This is a list of features we plan to add or improvements we are working on.
 - [x] Initial release of the source code and pre-trained models.
 - [x] Elaberate `README.md` with instructions for training and inference.
 - [x] Provide a Gradio app for demo use of OriField.
+- [x] Release the BEV training data, pre-trained checkpoint, and ONNX model on Hugging Face.
 - [ ] Release ROS implementation.
 - [ ] Add support for multi-GPU training.
 - [ ] Create a Dockerfile for easier environment setup and deployment.
@@ -87,6 +91,27 @@ Follow these steps to set up the project environment. This project is tested on 
     ```bash
     pip install -v -e .
     ```
+
+## Download Data and Models
+
+The paper's data and model artifacts are available on Hugging Face:
+
+| Resource | Contents |
+| --- | --- |
+| [BEV training dataset](https://huggingface.co/datasets/yuminhhuang/OriField-raw-derived-bev-kitti) | `raw-derived-bev-kitti/`: 45,192 files, approximately 72.03 GB. Symbolic links and `.3d` data are excluded. |
+| [Pre-trained models](https://huggingface.co/yuminhhuang/OriField) | `output.example/config.yaml`, `output.example/model_final.pth`, and `output.example/inference/model.onnx`. |
+
+Use the Hugging Face CLI (`hf`) to download the files. Run the model download from the root of this repository:
+
+```bash
+# Download training data to ./data/raw-derived-bev-kitti/ (about 72 GB).
+hf download yuminhhuang/OriField-raw-derived-bev-kitti --repo-type dataset \
+    --include "raw-derived-bev-kitti/**" --local-dir ./data
+
+# Download the checkpoint, configuration, and ONNX export to ./output.example/.
+hf download yuminhhuang/OriField \
+    --include "output.example/**" --local-dir .
+```
 
 ## Start Training
 
